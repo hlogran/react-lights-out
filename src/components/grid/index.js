@@ -1,24 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Cell from '../cell'
 import './style.css';
 
-class Grid extends Component {
-  static defaultProps = {
-    toggleCell: ()=>{},
-    values: [
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0]
-    ]
-  };
-
-  render() {
+const Grid = (props) => {
     const {
       values,
       toggleCell
-    } = this.props;
+    } = props;
 
     return (
       <div className="Grid">
@@ -39,7 +27,6 @@ class Grid extends Component {
         })}
       </div>
     );
-  }
 }
 
 export default Grid;

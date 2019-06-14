@@ -7,21 +7,23 @@ class Game extends Component {
     super(props);
     this.state = {
       playerHasWon: false,
-      lights: [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0]
-      ]
+      lights: this.generateRandomLights()
     };
-    this.shuffleLights = this.shuffleLights.bind(this);
     this.toggleCell = this.toggleCell.bind(this);
-
+    this.restart = this.restart.bind(this);
   }
 
-  componentDidMount(){
-    this.shuffleLights();
+  restart(){
+    const {
+      playerHasWon
+    } = this.state;
+
+    if(playerHasWon) {
+      this.setState({
+        playerHasWon: false,
+        lights: this.generateRandomLights()
+      });
+    }
   }
 
   render() {
@@ -31,26 +33,35 @@ class Game extends Component {
     } = this.state;
 
     if(playerHasWon){
-      return <h1>You Won!</h1>
+      return (
+        <div className={'Game-winner'} onClick={this.restart}>
+          <span className='neon-orange'>YOU</span>
+          <span className='neon-blue'>WIN!</span>
+        </div>
+      )
     } else {
       return (
-        <Grid values={lights} toggleCell={this.toggleCell}/>
+        <div>
+          <div className='Game-title'>
+            <div className='neon-orange'>Lights</div>
+            <div className='neon-blue'>Out</div>
+          </div>
+          <Grid values={lights} toggleCell={this.toggleCell}/>
+        </div>
       );
     }
   }
 
-  shuffleLights(){
-    const {
-      lights
-    } = this.state;
-
-    const newLights = lights.map((innerArray, r) => {
-      return innerArray.map((item, c) => {
-        return Math.floor(Math.random()*2);
-      });
-    });
-
-    this.setState({ lights: newLights });
+  generateRandomLights(){
+    const lights = [];
+    for(let r = 0; r < 5; r++){
+      lights.push([]);
+      for(let c = 0; c < 5; c++){
+        lights[r].push(Boolean(Math.floor(Math.random()*2)));
+      }
+    }
+    console.log('lights', lights);
+    return lights;
   }
 
   toggleCell(row, col){
@@ -59,10 +70,10 @@ class Game extends Component {
     } = this.state;
 
     const newLights = lights.map((innerArray, r) => {
-      if ( Math.abs(r-row)<1 ) {
+      if ( Math.abs(r-row)<2 ) {
         return innerArray.map((item, c) => {
-          if (Math.abs(c-col)<1) {
-            return !item
+          if (Math.abs(c-col)<2 && (c===col || r===row)) {
+            return !item;
           } else {
             return item;
           }
