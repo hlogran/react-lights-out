@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import Row from '../row'
+import Cell from '../cell'
 import './style.css';
 
 class Grid extends Component {
   static defaultProps = {
+    toggleCell: ()=>{},
     values: [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
@@ -15,12 +16,27 @@ class Grid extends Component {
 
   render() {
     const {
-      values
+      values,
+      toggleCell
     } = this.props;
 
     return (
       <div className="Grid">
-        {values.map((r, i) => <Row key={i} values={r}/>)}
+        {values.map((r, row) => {
+          return (
+            <div key={row} className="Grid-row">
+              { r.map((v, col) => {
+                return (
+                  <Cell
+                    key={col}
+                    value={v}
+                    onToggle = {toggleCell.bind(this, row, col)}
+                  />
+                )
+              })}
+            </div>
+          )
+        })}
       </div>
     );
   }

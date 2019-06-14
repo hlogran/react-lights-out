@@ -2,14 +2,18 @@ import React, {Component} from 'react';
 import './style.css';
 
 class Cell extends Component {
-  static defaultProps = {value: 0};
+  static defaultProps = {
+    value: 0,
+    onToggle: ()=>{}
+  };
 
   render(){
     const {
-      value
+      value,
+      onToggle
     } = this.props;
 
-    return <div className={'Cell ' + (value ? 'Cell-on' : 'Cell-off')} />
+    return <div onClick={onToggle} className={'Cell ' + (value ? 'Cell-on' : 'Cell-off')} />
   };
 }
 

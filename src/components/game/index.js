@@ -13,9 +13,13 @@ class Game extends Component {
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0]
       ]
-    }
+    };
     this.shuffleLights = this.shuffleLights.bind(this);
+    this.toggleCell = this.toggleCell.bind(this);
 
+  }
+
+  componentDidMount(){
     this.shuffleLights();
   }
 
@@ -25,7 +29,7 @@ class Game extends Component {
     } = this.state;
 
     return (
-      <Grid values={lights}/>
+      <Grid values={lights} toggleCell={this.toggleCell}/>
     );
   }
 
@@ -34,16 +38,35 @@ class Game extends Component {
       lights
     } = this.state;
 
-    for(let row=0; row<lights.length; row++){
-      for(let col=0; col<lights[row].length; col++){
-        lights[row][col] = Math.floor(Math.random()*2);
-      }
-    }
-
-    this.setState({
-      lights: JSON.parse( JSON.stringify(lights) )
+    const newLights = lights.map((innerArray, r) => {
+      return innerArray.map((item, c) => {
+        return Math.floor(Math.random()*2);
+      });
     });
-    console.log('shuffleLights');
+
+    this.setState({ lights: newLights });
+  }
+
+  toggleCell(row, col){
+    const {
+      lights
+    } = this.state;
+
+    const newLights = lights.map((innerArray, r) => {
+      if ( Math.abs(r-row)<2 ) {
+        return innerArray.map((item, c) => {
+          if (Math.abs(c-col)<2) {
+            return !item
+          } else {
+            return item;
+          }
+        });
+      } else {
+        return innerArray
+      }
+    });
+
+    this.setState({ lights: newLights });
   }
 }
 

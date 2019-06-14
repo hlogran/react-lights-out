@@ -4,3 +4,10 @@
   justify-content: center;
   align-items: center;
 }
+
+.Grid-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
