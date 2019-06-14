@@ -6,6 +6,7 @@ class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      playerHasWon: false,
       lights: [
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
@@ -25,12 +26,17 @@ class Game extends Component {
 
   render() {
     const {
-      lights
+      lights,
+      playerHasWon
     } = this.state;
 
-    return (
-      <Grid values={lights} toggleCell={this.toggleCell}/>
-    );
+    if(playerHasWon){
+      return <h1>You Won!</h1>
+    } else {
+      return (
+        <Grid values={lights} toggleCell={this.toggleCell}/>
+      );
+    }
   }
 
   shuffleLights(){
@@ -53,9 +59,9 @@ class Game extends Component {
     } = this.state;
 
     const newLights = lights.map((innerArray, r) => {
-      if ( Math.abs(r-row)<2 ) {
+      if ( Math.abs(r-row)<1 ) {
         return innerArray.map((item, c) => {
-          if (Math.abs(c-col)<2) {
+          if (Math.abs(c-col)<1) {
             return !item
           } else {
             return item;
@@ -66,7 +72,14 @@ class Game extends Component {
       }
     });
 
-    this.setState({ lights: newLights });
+    this.setState({
+      lights: newLights,
+      playerHasWon: this.playerHasWon(newLights)
+    });
+  }
+
+  playerHasWon(lights){
+    return lights.every(row => row.every(cell => !cell));
   }
 }
 
