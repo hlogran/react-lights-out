@@ -1,0 +1,12 @@
+.Cell {
+  width: 5vh;
+  height: 5vh;
+}
+
+.Cell-on {
+  background: yellow;
+}
+
+.Cell-off {
+  background: grey;
+}
